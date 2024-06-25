@@ -1,0 +1,28 @@
+@use "./helpers/_placeholders";
+@use "./helpers/_variables" as var;
+@use "./helpers/_mixins" as mx;
+
+@use "./sections/header";
+@use "./sections/game";
+@use "./sections/jsClasses";
+
+:root{
+    --winning-blocks: #183b4c;
+}
+
+*{
+    @extend %noMarPad;
+    box-sizing: border-box;
+}
+
+body{
+    color: var.$mainColor;
+    font-family: sans-serif;
+}
+
+.container{
+    padding: 40px;
+    height: 100vh;
+    @include mx.flexing(column, center, center);
+    background-color: var.$backColor;
+}

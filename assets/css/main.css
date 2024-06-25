@@ -1,1 +1,94 @@
-/*# sourceMappingURL=main.css.map */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+header h1 {
+  font-size: 54px;
+  text-transform: uppercase;
+}
+header h2 {
+  margin-top: -0.7rem;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+header button {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #eae5dc;
+  color: #333;
+  border-color: #eae5dc;
+  font-size: 18px;
+  transition: 150ms transform;
+  font-weight: 600;
+}
+header button:hover {
+  cursor: pointer;
+  transform: translateY(2px);
+  border-color: #a49f93;
+}
+header h3 {
+  padding: 1rem 0;
+  height: 1rem;
+  font-size: 20px;
+}
+
+#gameboard {
+  width: 450px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+#gameboard .boxes {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-direction: auto;
+  justify-content: center;
+  align-items: center;
+  color: #eae5dc;
+  font-size: 120px;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+}
+#gameboard .boxes:nth-child(3n) {
+  border-right: none;
+}
+#gameboard .boxes:nth-child(6) ~ .boxes {
+  border-bottom: none;
+}
+
+.runningHover:hover {
+  cursor: pointer;
+  background-color: rgba(234, 229, 220, 0.1333333333);
+}
+
+:root {
+  --winning-blocks: #183b4c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: #eae5dc;
+  font-family: sans-serif;
+}
+
+.container {
+  padding: 40px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #26607a;
+}/*# sourceMappingURL=main.css.map */

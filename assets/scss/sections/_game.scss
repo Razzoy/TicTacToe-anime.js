@@ -1,0 +1,29 @@
+@use "../helpers/_placeholders";
+@use "../helpers/_variables" as var;
+@use "../helpers/_mixins" as mx;
+
+#gameboard{
+    width: 450px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    
+
+    .boxes{
+        width: 150px;
+        height: 150px;
+        @include mx.flexing(auto, center, center);
+        color: var.$mainColor;
+        font-size: 120px;
+        border-right: 2px solid;
+        border-bottom: 2px solid;
+    }
+    
+    .boxes:nth-child(3n){
+        border-right: none;
+    }
+    
+    .boxes:nth-child(6) ~ .boxes{
+        border-bottom: none;
+    }
+}

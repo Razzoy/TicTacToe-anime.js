@@ -1,0 +1,10 @@
+@use "../helpers/_placeholders";
+@use "../helpers/_variables" as var;
+@use "../helpers/_mixins" as mx;
+
+.runningHover{
+    &:hover{
+        cursor: pointer;
+        background-color: var.$hoverColor;
+    }
+}

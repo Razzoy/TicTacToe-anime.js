@@ -1,0 +1,38 @@
+@use "../helpers/_placeholders";
+@use "../helpers/_variables" as var;
+@use "../helpers/_mixins" as mx;
+
+
+header{
+    @include mx.flexing(column, center, center);
+    h1{
+        font-size: 54px;
+        text-transform: uppercase;
+    }
+    h2{
+        margin-top: -0.7rem;
+        font-size: 20px;
+        text-transform: uppercase;
+    }
+    button{
+        margin-top: 1rem;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background-color: var.$mainColor;
+        color: var.$btnColor;
+        border-color: var.$mainColor;
+        font-size: 18px;
+        transition: 150ms transform;
+        font-weight: 600;
+        &:hover{
+            cursor: pointer;
+            transform: translateY(2px);
+            border-color: var.$altColor;
+        }
+    }
+    h3{
+        padding: 1rem 0;
+        height: 1rem;
+        font-size: 20px;
+    }
+}
