@@ -2,28 +2,71 @@
 @use "../helpers/_variables" as var;
 @use "../helpers/_mixins" as mx;
 
-#gameboard{
+#gameboard {
     width: 450px;
-    display: flex;
     flex-wrap: wrap;
     margin-top: 40px;
-    
+    @include mx.flexing(row, center, center);
 
-    .boxes{
-        width: 150px;
-        height: 150px;
+
+    .boxes {
+        position: relative;
+        width: 140px;
+        height: 140px;
         @include mx.flexing(auto, center, center);
         color: var.$mainColor;
         font-size: 120px;
         border-right: 2px solid;
         border-bottom: 2px solid;
     }
-    
-    .boxes:nth-child(3n){
+
+    .boxes:nth-child(3n) {
         border-right: none;
     }
-    
-    .boxes:nth-child(6) ~ .boxes{
+
+    .boxes:nth-child(6)~.boxes {
         border-bottom: none;
+    }
+}
+
+#bricks {
+    margin-top: 2rem;
+
+    div {
+        background-color: var.$btnColor;
+        @include mx.flexing(row, center, center);
+        border-radius: 25px;
+        border: 5px solid var.$mainColor;
+        width: 100px;
+        height: 100px;
+        position: absolute;
+
+        img {
+            width: 60px;
+            filter: invert(96%) sepia(9%) saturate(1600%) hue-rotate(310deg) brightness(108%) contrast(84%);
+        }
+
+        .circle {
+            width: 73px;
+        }
+    }
+}
+
+.crossBrick,
+.circleBrick {
+    background-color: var.$btnColor;
+    @include mx.flexing(row, center, center);
+    border-radius: 25px;
+    border: 5px solid var.$mainColor;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    img {
+        width: 60px;
+        filter: invert(96%) sepia(9%) saturate(1600%) hue-rotate(310deg) brightness(108%) contrast(84%);
+    }
+
+    .circle {
+        width: 73px;
     }
 }

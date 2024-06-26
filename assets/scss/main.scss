@@ -21,7 +21,6 @@ body{
 }
 
 .container{
-    padding: 40px;
     height: 100vh;
     @include mx.flexing(column, center, center);
     background-color: var.$backColor;

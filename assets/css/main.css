@@ -22,9 +22,9 @@ header button {
   margin-top: 1rem;
   padding: 10px 20px;
   border-radius: 10px;
-  background-color: #eae5dc;
+  background-color: #eaddc6;
   color: #333;
-  border-color: #eae5dc;
+  border-color: #eaddc6;
   font-size: 18px;
   transition: 150ms transform;
   font-weight: 600;
@@ -35,25 +35,29 @@ header button:hover {
   border-color: #a49f93;
 }
 header h3 {
-  padding: 1rem 0;
+  margin: 1rem 0;
   height: 1rem;
   font-size: 20px;
 }
 
 #gameboard {
   width: 450px;
-  display: flex;
   flex-wrap: wrap;
   margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 #gameboard .boxes {
-  width: 150px;
-  height: 150px;
+  position: relative;
+  width: 140px;
+  height: 140px;
   display: flex;
   flex-direction: auto;
   justify-content: center;
   align-items: center;
-  color: #eae5dc;
+  color: #eaddc6;
   font-size: 120px;
   border-right: 2px solid;
   border-bottom: 2px solid;
@@ -63,6 +67,52 @@ header h3 {
 }
 #gameboard .boxes:nth-child(6) ~ .boxes {
   border-bottom: none;
+}
+
+#bricks {
+  margin-top: 2rem;
+}
+#bricks div {
+  background-color: #333;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  border: 5px solid #eaddc6;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+#bricks div img {
+  width: 60px;
+  filter: invert(96%) sepia(9%) saturate(1600%) hue-rotate(310deg) brightness(108%) contrast(84%);
+}
+#bricks div .circle {
+  width: 73px;
+}
+
+.crossBrick,
+.circleBrick {
+  background-color: #333;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  border: 5px solid #eaddc6;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}
+.crossBrick img,
+.circleBrick img {
+  width: 60px;
+  filter: invert(96%) sepia(9%) saturate(1600%) hue-rotate(310deg) brightness(108%) contrast(84%);
+}
+.crossBrick .circle,
+.circleBrick .circle {
+  width: 73px;
 }
 
 .runningHover:hover {
@@ -79,12 +129,11 @@ header h3 {
 }
 
 body {
-  color: #eae5dc;
+  color: #eaddc6;
   font-family: sans-serif;
 }
 
 .container {
-  padding: 40px;
   height: 100vh;
   display: flex;
   flex-direction: column;
