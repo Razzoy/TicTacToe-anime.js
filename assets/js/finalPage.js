@@ -77,7 +77,7 @@ const startGame = () => {
     //anime.js add bricks falling When game starts
     brickFall.add({
         targets: '#bricks',
-        translateY: 365,
+        translateY: 333,
         opacity: [0, 1]
     });
 
@@ -107,7 +107,7 @@ const startGame = () => {
 
 
 
-    winnerText.innerText = `It is Player X's turn..`;
+    winnerText.innerText = `It is Player X 's turn..`;
 };
 
 function boxClicked(e) {
@@ -143,7 +143,7 @@ function boxClicked(e) {
             const winningBlocks = playerHasWon();
 
             if (winningBlocks !== false) {
-                winnerText.innerText = `Player ${currentPlayer} has won!`;
+                winnerText.innerText = `Player ${currentPlayer} has won !`;
                 highlightWinningCombo(winningBlocks);
                 gameOver = true;
                 boxes.forEach(box => box.classList.remove('runningHover'));
@@ -191,7 +191,7 @@ function boxClicked(e) {
             }
 
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            winnerText.innerText = `It is Player ${currentPlayer}'s turn..`;
+            winnerText.innerText = `It is Player ${currentPlayer} 's turn..`;
         }
     }
 }
@@ -253,7 +253,7 @@ function reset() {
 
 
     currentPlayer = 'X';
-    winnerText.innerText = `It is Player X's turn..`;
+    winnerText.innerText = `It is Player X 's turn..`;
 }
 
 startGame();

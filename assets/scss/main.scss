@@ -21,6 +21,10 @@
     box-sizing: border-box;
 }
 
+html{
+    background-color: var.$backColor;
+}
+
 body{
     color: var.$altColor;
     font-family: 'wp3';
@@ -29,5 +33,4 @@ body{
 .container{
     height: 100vh;
     @include mx.flexing(column, auto, center);
-    background-color: var.$backColor;
 }
