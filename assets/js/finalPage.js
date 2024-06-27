@@ -51,7 +51,7 @@ function createBricks() {
         X_bricks.push(X_brick);
     }
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         let O_brick = document.createElement('div');
         let O_svg = document.createElement('img');
         O_svg.src = 'assets/img/svg/circle.svg';
@@ -73,7 +73,7 @@ const startGame = () => {
     //anime.js add bricks falling When game starts
     brickFall.add({
         targets: '#bricks',
-        translateY: 333,
+        translateY: 336,
         opacity: [0, 1]
     });
 
