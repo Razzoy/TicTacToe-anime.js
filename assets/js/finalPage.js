@@ -228,8 +228,7 @@ function reset() {
         targets: '#gameboard',
         rotate: '1turn'
     });
-    //Restarts bricks falling animation
-    brickFall.restart()
+
 
     if (crossDance) {
         crossDance.pause();
@@ -241,7 +240,13 @@ function reset() {
     spaces.fill(null);
     gameOver = false;
     boxes.forEach(box => {
-        box.innerHTML = '';
+        //Restarts bricks falling animation
+        if (!box.innerHTML == '') {
+            brickFall.restart()
+            box.innerHTML = '';
+        } else{
+            box.innerHTML = '';
+        }
         box.style.backgroundColor = '';
         box.classList.add('runningHover');
     });
