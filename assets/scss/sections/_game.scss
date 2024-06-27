@@ -12,7 +12,7 @@
 
     @media screen and (max-width: 800px){
         width: 300px;
-        margin-top: 2.73rem;       
+        margin-top: 2rem;       
     }
     
     .boxes {
@@ -47,6 +47,10 @@
     position: absolute;
     top: 20rem;
     z-index: 5;
+    @media screen and (max-width: 800px){
+        top: 17.75rem;
+        gap: 0.3rem;        
+    }
 }
 
 .crossBrick,
@@ -80,7 +84,7 @@
     background-color: var.$backAlt;
     padding: 5.7rem 14rem;
     @media screen and (max-width: 800px){
-        padding: 5.1rem 12.45rem;
-        margin-top: 2.72rem;        
+        padding: 4.85rem 11.85rem;
+        margin-top: 2rem;        
     }
 }
