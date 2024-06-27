@@ -17,7 +17,7 @@ header h1 .headerText {
 }
 @media screen and (max-width: 800px) {
   header h1 .headerText {
-    width: 120px;
+    width: 100px;
   }
 }
 header h2 {
@@ -71,7 +71,7 @@ header h3 {
 @media screen and (max-width: 800px) {
   #gameboard {
     width: 300px;
-    margin-top: 2.45rem;
+    margin-top: 2.73rem;
   }
 }
 #gameboard .boxes {
@@ -150,8 +150,8 @@ header h3 {
 }
 @media screen and (max-width: 800px) {
   .brick-holder {
-    padding: 5.1rem 12.4rem;
-    margin-top: 2.45rem;
+    padding: 5.1rem 12.45rem;
+    margin-top: 2.72rem;
   }
 }
 
