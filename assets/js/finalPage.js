@@ -12,6 +12,8 @@ let brickFall = anime.timeline({
 
 let crossDance;
 let circleDance;
+let headerJump;
+
 
 // Variable imports
 let winnerText = document.getElementById('winnerText');
@@ -75,9 +77,35 @@ const startGame = () => {
     //anime.js add bricks falling When game starts
     brickFall.add({
         targets: '#bricks',
-        translateY: 373,
+        translateY: 365,
         opacity: [0, 1]
     });
+
+    function ticTacToeDelay(target, delay) {
+        anime({
+            targets: target,
+            translateY: -10,
+            duration: 1000,
+            easing: 'easeInOutQuad',
+            direction: 'alternate',
+            delay: delay,
+            complete: function () {
+                anime({
+                    targets: target,
+                    translateY: -10,
+                    duration: 1000,
+                    easing: 'easeInOutQuad',
+                    direction: 'alternate',
+                    loop: true,
+                });
+            }
+        });
+    }
+    ticTacToeDelay('#tic', 100);
+    ticTacToeDelay('#tac', 400);
+    ticTacToeDelay('#toe', 700);
+
+
 
     winnerText.innerText = `It is Player X's turn..`;
 };
@@ -100,8 +128,17 @@ function boxClicked(e) {
 
             brickContainer.removeChild(brick);
             spaces[id] = currentPlayer;
+
             if (e.target.children.length === 0) {
                 e.target.appendChild(brick);
+                //added animation for changing parrent/moving brick to block
+                anime({
+                    targets: brick,
+                    translateY: [brickContainer.getBoundingClientRect().top - e.target.getBoundingClientRect().top, 0],
+                    translateX: [brickContainer.getBoundingClientRect().left - e.target.getBoundingClientRect().left, 0],
+                    duration: 400,
+                    easing: 'easeOutCubic'
+                });
             }
             const winningBlocks = playerHasWon();
 
@@ -116,13 +153,13 @@ function boxClicked(e) {
                         crossDance = anime({
                             targets: '.crossBrick',
                             translateY: function () {
-                                return anime.random(-10, 10);
+                                return anime.random(-8, 8);
                             },
                             translateX: function () {
-                                return anime.random(-10, 10);
+                                return anime.random(-8, 8);
                             },
                             easing: 'easeInOutQuad',
-                            duration: 300,
+                            duration: 400,
                             complete: randomValues
                         });
                     }
@@ -132,13 +169,13 @@ function boxClicked(e) {
                         circleDance = anime({
                             targets: '.circleBrick',
                             translateY: function () {
-                                return anime.random(-10, 10);
+                                return anime.random(-8, 8);
                             },
                             translateX: function () {
-                                return anime.random(-10, 10);
+                                return anime.random(-8, 8);
                             },
                             easing: 'easeInOutQuad',
-                            duration: 300,
+                            duration: 400,
                             complete: randomValues
                         });
                     }
