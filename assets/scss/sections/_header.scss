@@ -3,36 +3,47 @@
 @use "../helpers/_mixins" as mx;
 
 
-header{
+header {
     @include mx.flexing(column, center, center);
-    h1{
-        font-size: 54px;
-        text-transform: uppercase;
-    }
-    h2{
-        margin-top: -0.7rem;
-        font-size: 20px;
-        text-transform: uppercase;
-    }
-    button{
-        margin-top: 1rem;
-        padding: 10px 20px;
-        border-radius: 10px;
-        background-color: var.$mainColor;
-        color: var.$btnColor;
-        border-color: var.$mainColor;
-        font-size: 18px;
-        transition: 150ms transform;
-        font-weight: 600;
-        &:hover{
-            cursor: pointer;
-            transform: translateY(2px);
-            border-color: var.$altColor;
+
+    h1 {
+        // font-size: 54px;
+        // text-transform: uppercase;
+        margin-top: 7rem;
+
+        img {
+            stroke-dasharray: 20;
+            filter: invert(100%) sepia(0%) saturate(1%) hue-rotate(81deg) brightness(108%) contrast(101%);
         }
     }
-    h3{
+
+    h2 {
+        margin-top: -0.5rem;
+        font-size: 30px;
+    }
+
+    button {
+        font-family: 'wp3';
+        margin-top: 1rem;
+        padding: 10px 20px;
+        border: 2px solid var.$altColor;
+        border-top-right-radius: 20px;
+        background-color: var.$backColor;
+        color: var.$altColor;
+        font-size: 20px;
+        transition: 250ms transform;
+        font-weight: 400;
+
+        &:hover {
+            cursor: pointer;
+            transform: translateX(5px);
+            color: var.$mainColor;
+        }
+    }
+
+    h3 {
         margin: 1rem 0;
         height: 1rem;
-        font-size: 20px;
+        font-size: 30px;
     }
 }

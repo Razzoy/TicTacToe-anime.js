@@ -1,8 +1,17 @@
 import anime from '../../animejs/lib/anime.es.js';
+
 const tl = anime.timeline({
-    duration: 1000,
-    easing: 'easeOutExpo',
+    duration: 800,
+    easing: 'easeOutCubic',
 });
+
+let brickFall = anime.timeline({
+    duration: 800,
+    easing: 'easeOutBounce',
+})
+
+let crossDance;
+let circleDance;
 
 // Variable imports
 let winnerText = document.getElementById('winnerText');
@@ -15,11 +24,11 @@ let brickContainer = document.getElementById('bricks');
 let X_bricks = [];
 let O_bricks = [];
 
-// let currentPlayer = X_text;
 let gameOver = false;
 let spaces = Array(9).fill(null);
 
 function createBricks() {
+
     for (let i = 0; i < 5; i++) {
         let X_brick = document.createElement('div');
         let X_svg = document.createElement('img');
@@ -45,8 +54,7 @@ function createBricks() {
 
 createBricks();
 
-let currentPlayerIndex = 0;
-let currentPlayer = X_bricks[currentPlayerIndex];
+let currentPlayer = 'X';
 
 const winningCombos = [
     [0, 1, 2],
@@ -64,6 +72,12 @@ const startGame = () => {
         box.addEventListener('click', boxClicked);
         box.classList.add('runningHover');
     });
+    //anime.js add bricks falling When game starts
+    brickFall.add({
+        targets: '#bricks',
+        translateY: 373,
+        opacity: [0, 1]
+    });
 
     winnerText.innerText = `It is Player X's turn..`;
 };
@@ -75,26 +89,61 @@ function boxClicked(e) {
         const id = e.target.id;
 
         if (!spaces[id]) {
+            let brick;
+            if (currentPlayer === 'X' && X_bricks.length > 0) {
+                brick = X_bricks.shift();
+            } else if (currentPlayer === 'O' && O_bricks.length > 0) {
+                brick = O_bricks.shift();
+            } else {
+                return;
+            }
+
+            brickContainer.removeChild(brick);
             spaces[id] = currentPlayer;
-            console.log(spaces[id]);
             if (e.target.children.length === 0) {
-                e.target.appendChild(currentPlayer);
+                e.target.appendChild(brick);
             }
             const winningBlocks = playerHasWon();
 
             if (winningBlocks !== false) {
-
-                if (currentPlayer.classList.contains('circleBrick')) {
-                    winnerText.innerText = `Player O has won!`;
-                } else {
-                    winnerText.innerText = `Player X has won!`;
-                }
-
-                console.log(winningBlocks);
-
-                winningBlocks.forEach(box => boxes[box].style.backgroundColor = winnerIndicator);
+                winnerText.innerText = `Player ${currentPlayer} has won!`;
+                highlightWinningCombo(winningBlocks);
                 gameOver = true;
                 boxes.forEach(box => box.classList.remove('runningHover'));
+
+                if (currentPlayer == 'X') {
+                    function randomValues() {
+                        crossDance = anime({
+                            targets: '.crossBrick',
+                            translateY: function () {
+                                return anime.random(-10, 10);
+                            },
+                            translateX: function () {
+                                return anime.random(-10, 10);
+                            },
+                            easing: 'easeInOutQuad',
+                            duration: 300,
+                            complete: randomValues
+                        });
+                    }
+                    randomValues();
+                } else if (currentPlayer == 'O') {
+                    function randomValues() {
+                        circleDance = anime({
+                            targets: '.circleBrick',
+                            translateY: function () {
+                                return anime.random(-10, 10);
+                            },
+                            translateX: function () {
+                                return anime.random(-10, 10);
+                            },
+                            easing: 'easeInOutQuad',
+                            duration: 300,
+                            complete: randomValues
+                        });
+                    }
+                    randomValues();
+                }
                 return;
             }
 
@@ -104,19 +153,10 @@ function boxClicked(e) {
                 return;
             }
 
-            currentPlayerIndex = (currentPlayerIndex + 1) % (X_bricks.length + O_bricks.length);
-            console.log(currentPlayerIndex);
-            currentPlayer = currentPlayerIndex % 2 === 0 ? X_bricks[Math.floor(currentPlayerIndex / 2)] : O_bricks[Math.floor(currentPlayerIndex / 2)];
-            console.log(currentPlayer);
-            if (currentPlayer.classList.contains('crossBrick')) {
-                winnerText.innerText = `It is Player X's turn..`;
-            } else {
-                winnerText.innerText = `It is Player O's turn..`;
-            }
-
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            winnerText.innerText = `It is Player ${currentPlayer}'s turn..`;
         }
     }
-    console.log(spaces);
 }
 
 function playerHasWon() {
@@ -131,34 +171,7 @@ function playerHasWon() {
 }
 
 function checkDraw() {
-    if (spaces.some(space => space === null)) {
-        return false;
-    }
-
-    // Check if no winning moves are left
-    for (let i = 0; i < spaces.length; i++) {
-        if (spaces[i] === null) {
-            // Simulate filling this space for both players and check if someone can win
-            let tempSpaces = [...spaces];
-            tempSpaces[i] = currentPlayer;
-            let canWin = false;
-
-            for (const condition of winningCombos) {
-                let [a, b, c] = condition;
-
-                if (tempSpaces[a] && (tempSpaces[a] === tempSpaces[b] && tempSpaces[a] === tempSpaces[c])) {
-                    canWin = true;
-                    break;
-                }
-            }
-
-            if (!canWin) {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    return spaces.every(space => space !== null);
 }
 
 function highlightWinningCombo(winningBlocks) {
@@ -173,27 +186,36 @@ function endGame() {
 resetBtn.addEventListener('click', reset);
 
 function reset() {
+    // Adds spin animation to gameboard
     tl.add({
         targets: '#gameboard',
         rotate: '1turn'
     });
+    //Restarts bricks falling animation
+    brickFall.restart()
 
-    tl.restart();
+    if (crossDance) {
+        crossDance.pause();
+    }
+    if (circleDance) {
+        circleDance.pause();
+    }
 
     spaces.fill(null);
     gameOver = false;
     boxes.forEach(box => {
-        box.innerText = '';
+        box.innerHTML = '';
         box.style.backgroundColor = '';
         box.classList.add('runningHover');
     });
 
     brickContainer.innerHTML = '';
-    X_bricks.forEach(brick => brickContainer.appendChild(brick));
-    O_bricks.forEach(brick => brickContainer.appendChild(brick));
+    X_bricks = [];
+    O_bricks = [];
+    createBricks();
 
-    currentPlayerIndex = 0;
-    currentPlayer = X_bricks[currentPlayerIndex];
+
+    currentPlayer = 'X';
     winnerText.innerText = `It is Player X's turn..`;
 }
 

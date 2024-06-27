@@ -6,8 +6,14 @@
 @use "./sections/game";
 @use "./sections/jsClasses";
 
+
+@font-face {
+    font-family: 'wp3';
+    src: url('../font/WO3.woff') format('woff');
+}
+
 :root{
-    --winning-blocks: #183b4c;
+    --winning-blocks: #886469;
 }
 
 *{
@@ -16,12 +22,12 @@
 }
 
 body{
-    color: var.$mainColor;
-    font-family: sans-serif;
+    color: var.$altColor;
+    font-family: 'wp3';
 }
 
 .container{
     height: 100vh;
-    @include mx.flexing(column, center, center);
+    @include mx.flexing(column, auto, center);
     background-color: var.$backColor;
 }

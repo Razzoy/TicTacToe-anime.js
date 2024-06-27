@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe Anime.js</title>
     <link rel="stylesheet" href="assets/css/main.css">
-    <script src="assets/js/test.js" defer type="module"></script>
+    <script src="assets/js/finalPage.js" defer type="module"></script>
     <script src="./animejs/lib/anime.es.js" type="module"></script>
 </head>
 
@@ -15,7 +15,11 @@
     
     <div id="container" class="container">
         <header>
-            <h1 id="headerText">Tic Tac Toe</h1>
+            <h1>
+                <img class="headerText" src="assets/img/svg/TIC.svg" alt="">
+                <img class="headerText" src="assets/img/svg/TAC.svg" alt="">
+                <img class="headerText" src="assets/img/svg/TOE.svg" alt="">
+            </h1>
             <h2 id="header">Using anime.js</h2>
             <button id="resetBtn">Reset</button>
             <h3 id="winnerText"></h3>
@@ -32,6 +36,7 @@
             <div id="8" class="boxes"></div>
         </div>
         <div id="bricks"></div>
+        <div class="brick-holder"></div>
     </div>
 </body>
 
