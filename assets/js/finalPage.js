@@ -1,19 +1,5 @@
+//import anime.js library
 import anime from '../../animejs/lib/anime.es.js';
-
-const tl = anime.timeline({
-    duration: 800,
-    easing: 'easeOutCubic',
-});
-
-let brickFall = anime.timeline({
-    duration: 800,
-    easing: 'easeOutBounce',
-})
-
-let crossDance;
-let circleDance;
-let headerJump;
-
 
 // Variable imports
 let winnerText = document.getElementById('winnerText');
@@ -22,13 +8,36 @@ let boxes = Array.from(document.getElementsByClassName('boxes'));
 let winnerIndicator = getComputedStyle(document.body).getPropertyValue('--winning-blocks');
 let brickContainer = document.getElementById('bricks');
 
-// Create bricks arrays
+//declaring animation variables
+let crossDance;
+let circleDance;
+let tl = anime.timeline({
+    duration: 800,
+    easing: 'easeOutCubic',
+});
+let brickFall = anime.timeline({
+    duration: 800,
+    easing: 'easeOutBounce',
+})
+
+// Create variables
+let currentPlayer = 'X';
 let X_bricks = [];
 let O_bricks = [];
-
 let gameOver = false;
 let spaces = Array(9).fill(null);
+const winningCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
 
+//Create Bricks
 function createBricks() {
 
     for (let i = 0; i < 5; i++) {
@@ -53,22 +62,9 @@ function createBricks() {
         O_bricks.push(O_brick);
     }
 }
-
 createBricks();
 
-let currentPlayer = 'X';
-
-const winningCombos = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-];
-
+//Make the game playable
 const startGame = () => {
     boxes.forEach(box => {
         box.addEventListener('click', boxClicked);
@@ -81,6 +77,7 @@ const startGame = () => {
         opacity: [0, 1]
     });
 
+    //anime.js add header moving with delay
     function ticTacToeDelay(target, delay) {
         anime({
             targets: target,
@@ -104,13 +101,11 @@ const startGame = () => {
     ticTacToeDelay('#tic', 100);
     ticTacToeDelay('#tac', 400);
     ticTacToeDelay('#toe', 700);
-
-
-
     winnerText.innerText = `It is Player X 's turn..`;
 };
-
+//Function for when a box get clicked
 function boxClicked(e) {
+    //If game is over, the button doesn't do anything
     if (gameOver) {
         return;
     } else {
@@ -147,7 +142,7 @@ function boxClicked(e) {
                 highlightWinningCombo(winningBlocks);
                 gameOver = true;
                 boxes.forEach(box => box.classList.remove('runningHover'));
-
+                //anime.js for moving the winning bricks in a 16x16px space randomly 
                 if (currentPlayer == 'X') {
                     function randomValues() {
                         crossDance = anime({
@@ -195,7 +190,7 @@ function boxClicked(e) {
         }
     }
 }
-
+//Checking if a player has won by looking at the winningcombos array
 function playerHasWon() {
     for (const condition of winningCombos) {
         let [a, b, c] = condition;
@@ -207,6 +202,7 @@ function playerHasWon() {
     return false;
 }
 
+
 function checkDraw() {
     return spaces.every(space => space !== null);
 }
@@ -215,6 +211,7 @@ function highlightWinningCombo(winningBlocks) {
     winningBlocks.forEach(box => boxes[box].style.backgroundColor = winnerIndicator);
 }
 
+//remove class if game is over
 function endGame() {
     gameOver = true;
     boxes.forEach(box => box.classList.remove('runningHover'));
@@ -222,6 +219,7 @@ function endGame() {
 
 resetBtn.addEventListener('click', reset);
 
+//Function for resetting the game
 function reset() {
     // Adds spin animation to gameboard
     tl.add({
