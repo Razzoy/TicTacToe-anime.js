@@ -1,51 +1,31 @@
-//Anime.js functions
+//import anime.js library
 import anime from '../../animejs/lib/anime.es.js';
-const tl = anime.timeline({
-    duration: 1000,
-    easing: 'easeOutExpo',
-});
 
-//Variable imports
+// Variable imports
 let winnerText = document.getElementById('winnerText');
 let resetBtn = document.getElementById('resetBtn');
 let boxes = Array.from(document.getElementsByClassName('boxes'));
 let winnerIndicator = getComputedStyle(document.body).getPropertyValue('--winning-blocks');
 let brickContainer = document.getElementById('bricks');
 
-//Create bricks
-let X_brick;
-let O_brick;
+//declaring animation variables
+let crossDance;
+let circleDance;
+let tl = anime.timeline({
+    duration: 800,
+    easing: 'easeOutCubic',
+});
+let brickFall = anime.timeline({
+    duration: 800,
+    easing: 'easeOutBounce',
+})
 
-// let currentPlayer = X_text;
+// Create variables
+let currentPlayer = 'X';
+let X_bricks = [];
+let O_bricks = [];
 let gameOver = false;
 let spaces = Array(9).fill(null);
-
-function createBricks() {
-    for (let i = 0; i < 5; i++) {
-        X_brick = document.createElement('div');
-        let X_svg = document.createElement('img');
-        X_svg.src = 'assets/img/svg/cross.svg';
-        X_brick.classList.add('crossBrick');
-        X_svg.classList.add('cross');
-        X_brick.appendChild(X_svg);
-        brickContainer.appendChild(X_brick);
-    }
-
-    for (let i = 0; i < 4; i++) {
-        O_brick = document.createElement('div');
-        let O_svg = document.createElement('img');
-        O_svg.src = 'assets/img/svg/circle.svg';
-        O_brick.classList.add('circleBrick');
-        O_svg.classList.add('circle');
-        O_brick.appendChild(O_svg);
-        brickContainer.appendChild(O_brick);
-    }
-}
-
-createBricks();
-
-let currentPlayer = X_brick;
-
 const winningCombos = [
     [0, 1, 2],
     [3, 4, 5],
@@ -57,47 +37,146 @@ const winningCombos = [
     [2, 4, 6]
 ];
 
+//Create Bricks
+function createBricks() {
+
+    for (let i = 0; i < 5; i++) {
+        let X_brick = document.createElement('div');
+        let X_svg = document.createElement('img');
+        X_svg.src = 'assets/img/svg/cross.svg';
+        X_brick.classList.add('crossBrick');
+        X_svg.classList.add('cross');
+        X_brick.appendChild(X_svg);
+        brickContainer.appendChild(X_brick);
+        X_bricks.push(X_brick);
+    }
+
+    for (let i = 0; i < 5; i++) {
+        let O_brick = document.createElement('div');
+        let O_svg = document.createElement('img');
+        O_svg.src = 'assets/img/svg/circle.svg';
+        O_brick.classList.add('circleBrick');
+        O_svg.classList.add('circle');
+        O_brick.appendChild(O_svg);
+        brickContainer.appendChild(O_brick);
+        O_bricks.push(O_brick);
+    }
+}
+createBricks();
+
+//Make the game playable
 const startGame = () => {
     boxes.forEach(box => {
-        box.addEventListener('click', boxClicked)
+        box.addEventListener('click', boxClicked);
         box.classList.add('runningHover');
-    })
+    });
+    //anime.js add bricks falling When game starts
+    brickFall.add({
+        targets: '#bricks',
+        translateY: 336,
+        opacity: [0, 1]
+    });
 
-    winnerText.innerText = `It is Player X's turn..`;
-
-
-}
-
+    //anime.js add header moving with delay
+    function ticTacToeDelay(target, delay) {
+        anime({
+            targets: target,
+            translateY: -10,
+            duration: 1000,
+            easing: 'easeInOutQuad',
+            direction: 'alternate',
+            delay: delay,
+            complete: function () {
+                anime({
+                    targets: target,
+                    translateY: -10,
+                    duration: 1000,
+                    easing: 'easeInOutQuad',
+                    direction: 'alternate',
+                    loop: true,
+                });
+            }
+        });
+    }
+    ticTacToeDelay('#tic', 100);
+    ticTacToeDelay('#tac', 400);
+    ticTacToeDelay('#toe', 700);
+    winnerText.innerText = `It is Player X 's turn..`;
+};
+//Function for when a box get clicked
 function boxClicked(e) {
+    //If game is over, the button doesn't do anything
     if (gameOver) {
-        return
+        return;
     } else {
         const id = e.target.id;
 
         if (!spaces[id]) {
-            spaces[id] = currentPlayer
-            console.log(spaces[id]);;
+            let brick;
+            if (currentPlayer === 'X' && X_bricks.length > 0) {
+                brick = X_bricks.shift();
+            } else if (currentPlayer === 'O' && O_bricks.length > 0) {
+                brick = O_bricks.shift();
+            } else {
+                return;
+            }
+
+            brickContainer.removeChild(brick);
+            spaces[id] = currentPlayer;
+
             if (e.target.children.length === 0) {
-                e.target.appendChild(currentPlayer);
+                e.target.appendChild(brick);
+                //added animation for changing parrent/moving brick to block
+                anime({
+                    targets: brick,
+                    translateY: [brickContainer.getBoundingClientRect().top - e.target.getBoundingClientRect().top, 0],
+                    translateX: [brickContainer.getBoundingClientRect().left - e.target.getBoundingClientRect().left, 0],
+                    duration: 400,
+                    easing: 'easeOutCubic'
+                });
             }
             const winningBlocks = playerHasWon();
 
             if (winningBlocks !== false) {
-
-                if (currentPlayer == O_brick) {
-                    winnerText.innerText = `Player O has won!`;
-                }
-                else {
-                    winnerText.innerText = `Player X has won!`;
-                }
-
-
-                console.log(winningBlocks);
-
-                winningBlocks.forEach(box => boxes[box].style.backgroundColor = winnerIndicator);
+                winnerText.innerText = `Player ${currentPlayer} has won !`;
+                highlightWinningCombo(winningBlocks);
                 gameOver = true;
                 boxes.forEach(box => box.classList.remove('runningHover'));
-                return
+                //anime.js for moving the winning bricks in a 16x16px space randomly 
+                if (currentPlayer == 'X') {
+                    function randomValues() {
+                        crossDance = anime({
+                            targets: '.crossBrick',
+                            translateY: function () {
+                                return anime.random(-8, 8);
+                            },
+                            translateX: function () {
+                                return anime.random(-8, 8);
+                            },
+                            easing: 'easeInOutQuad',
+                            duration: 400,
+                            complete: randomValues
+                        });
+                    }
+                    randomValues();
+                } else if (currentPlayer == 'O') {
+                    function randomValues() {
+                        circleDance = anime({
+                            targets: '.circleBrick',
+                            translateY: function () {
+                                return anime.random(-8, 8);
+                            },
+                            translateX: function () {
+                                return anime.random(-8, 8);
+                            },
+                            easing: 'easeInOutQuad',
+                            duration: 400,
+                            complete: randomValues
+                        });
+                    }
+                    randomValues();
+                }
+                return;
             }
 
             if (checkDraw()) {
@@ -106,67 +185,33 @@ function boxClicked(e) {
                 return;
             }
 
-            currentPlayer = currentPlayer == X_brick ? O_brick : X_brick;
-            if (currentPlayer == X_brick){
-                winnerText.innerText = `It is Player X's turn..`;
-            } else{
-                winnerText.innerText = `It is Player O's turn..`;
-            }
-            
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            winnerText.innerText = `It is Player ${currentPlayer} 's turn..`;
         }
     }
-    console.log(spaces);
 }
-
-
-
+//Checking if a player has won by looking at the winningcombos array
 function playerHasWon() {
     for (const condition of winningCombos) {
         let [a, b, c] = condition;
 
-        if (spaces[a] && (spaces[a] == spaces[b] && spaces[a] == spaces[c])) {
+        if (spaces[a] && (spaces[a] === spaces[b] && spaces[a] === spaces[c])) {
             return [a, b, c];
         }
     }
-    return false
+    return false;
 }
+
 
 function checkDraw() {
-    if (spaces.some(space => space === null)) {
-        return false;
-    }
-
-    // Check if no winning moves are left
-    for (let i = 0; i < spaces.length; i++) {
-        if (spaces[i] === null) {
-            // Simulate filling this space for both players and check if someone can win
-            let tempSpaces = [...spaces];
-            tempSpaces[i] = currentPlayer;
-            let canWin = false;
-
-            for (const condition of winningCombos) {
-                let [a, b, c] = condition;
-
-                if (tempSpaces[a] && (tempSpaces[a] == tempSpaces[b] && tempSpaces[a] == tempSpaces[c])) {
-                    canWin = true;
-                    break;
-                }
-            }
-
-            if (!canWin) {
-                return false; // At least one move found where someone can still win
-            }
-        }
-    }
-
-    return true; // No moves found where someone can win
+    return spaces.every(space => space !== null);
 }
-
 
 function highlightWinningCombo(winningBlocks) {
     winningBlocks.forEach(box => boxes[box].style.backgroundColor = winnerIndicator);
 }
 
+//remove class if game is over
 function endGame() {
     gameOver = true;
     boxes.forEach(box => box.classList.remove('runningHover'));
@@ -174,27 +219,44 @@ function endGame() {
 
 resetBtn.addEventListener('click', reset);
 
+//Function for resetting the game
 function reset() {
+    // Adds spin animation to gameboard
     tl.add({
         targets: '#gameboard',
         rotate: '1turn'
     });
 
-    tl.restart();
 
+    if (crossDance) {
+        crossDance.pause();
+    }
+    if (circleDance) {
+        circleDance.pause();
+    }
 
     spaces.fill(null);
     gameOver = false;
     boxes.forEach(box => {
-        box.innerText = '';
+        //Restarts bricks falling animation
+        if (!box.innerHTML == '') {
+            brickFall.restart()
+            box.innerHTML = '';
+        } else{
+            box.innerHTML = '';
+        }
         box.style.backgroundColor = '';
         box.classList.add('runningHover');
-    })
-    brickContainer.appendChild(X_brick);
-    brickContainer.appendChild(O_brick);
+    });
 
-    currentPlayer = X_brick;
-    winnerText.innerText = `It is Player X's turn..`;
+    brickContainer.innerHTML = '';
+    X_bricks = [];
+    O_bricks = [];
+    createBricks();
 
+
+    currentPlayer = 'X';
+    winnerText.innerText = `It is Player X 's turn..`;
 }
+
 startGame();
